@@ -1,0 +1,14 @@
+{
+    "customerfeel_review_sync": {
+        "column": {
+            "review_id": true,
+            "status": true
+        },
+        "index": {
+            "CUSTOMERFEEL_REVIEW_SYNC_REVIEW_ID": true
+        },
+        "constraint": {
+            "CUSTOMERFEEL_REVIEW_SYNC_REVIEW_ID_REVIEW_REVIEW_ID": true
+        }
+    }
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="CustomerFeel\ApiConnector\Api\Data\ReviewInterface" type="CustomerFeel\ApiConnector\Model\Review" />
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="customerfeel_apiconnector_post_review_command" xsi:type="object">
+                    CustomerFeel\ApiConnector\Console\Command\PostReviewsCommand
+                </item>
+                <item name="customerfeel_apiconnector_sync_review_sentiment_command" xsi:type="object">
+                    CustomerFeel\ApiConnector\Console\Command\SyncReviewSentimentsCommand
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="CustomerFeel\ApiConnector\Console\Command\PostReviewsCommand">
+        <arguments>
+            <argument name="postReviewsCommand" xsi:type="object">CustomerFeel\ApiConnector\Model\Command\PostReviewsCommand\Proxy</argument>
+        </arguments>
+    </type>
+
+</config>
