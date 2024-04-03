@@ -2,96 +2,122 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Model;
+namespace Sentimo\ReviewAnalysis\Model;
 
-use CustomerFeel\ApiConnector\Api\Data\ReviewInterface;
 use GuzzleHttp\ClientFactory;
 use GuzzleHttp\Exception\RequestException;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Url\DecoderInterface;
 use Psr\Log\LoggerInterface;
+use Sentimo\ReviewAnalysis\Model\RequestParam\CompositeReviewRequestParamBuilder;
+
+use function __;
+use function explode;
+use function sprintf;
+use function time;
 
 class Client
 {
-    private const BASE_URI = 'http://127.0.0.1:8000/';
-    private const JWT_TOKEN_CACHE_KEY  = 'customerfeel_jwt_token';
+    private const JWT_TOKEN_CACHE_KEY = 'sentimo_review_analysis_jwt_token';
+
     private ?string $jwtToken = null;
 
     private ?\GuzzleHttp\Client $guzzleClient = null;
 
     /**
      * Todo : custom logger
-     * @param ClientFactory $guzzleClientFactory
-     * @param CacheInterface $cache
-     * @param LoggerInterface $logger
-     * @param SerializerInterface $serializer
-     * @throws LocalizedException
+     *
+     * @param \GuzzleHttp\ClientFactory $guzzleClientFactory
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        private readonly \GuzzleHttp\ClientFactory $guzzleClientFactory,
+        private readonly ClientFactory $guzzleClientFactory,
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger,
         private readonly SerializerInterface $serializer,
+        private readonly DecoderInterface $urlDecoder,
         private readonly Config $config,
+        private readonly CompositeReviewRequestParamBuilder $compositeReviewRequestParamBuilder,
     ) {
         $this->login();
     }
 
     /**
-     * @param ReviewInterface[] $reviews
-     * @return void
+     * @param \Sentimo\ReviewAnalysis\Api\Data\ReviewInterface[] $reviews
+     *
+     * @return int[]
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function postReviews(array $reviews): array
     {
         $postedReviewIds = [];
+
         foreach ($reviews as $review) {
             try {
                 $response = $this->guzzleClient->post('/api/reviews', [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $this->jwtToken,
+                        'Accept' => 'application/ld+json',
+                        'Content-type' => 'application/ld+json',
                     ],
-                    'json' => $review->__serialize(),
+                    'json' => $this->compositeReviewRequestParamBuilder->buildRequestParam($review),
                 ]);
+
                 if ($response->getStatusCode() !== 201) {
-                    throw new LocalizedException(__('Something went wrong when posting review ....'));
+                    throw new LocalizedException(__($response->getBody()->getContents()));
                 }
+
                 $postedReviewIds[] = $review->getExternalId();
             } catch (RequestException $exception) {
                 $this->logger->error(
                     sprintf(
-                        'Something went wrong when posting review with id = %s make sure a review with the same external id does not exist in the platform.',
+                        'Something went wrong when posting review with id = %s
+                        make sure a review with the same external id does not exist in the platform.',
                         $review->getExternalId()
-                    )
+                    ),
+                    $exception->getTrace()
                 );
+            } catch (\Throwable $exception) {
+                $this->logger->critical($exception->getMessage(), $exception->getTrace());
             }
         }
 
+        //Todo : handle errors
         return $postedReviewIds;
     }
 
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getReviews(): array
     {
         $response = $this->guzzleClient->get('/api/reviews', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->jwtToken,
                 'Accept' => 'application/json',
-                'Content-type' => 'application/json'
+                'Content-type' => 'application/json',
             ],
         ]);
+
         if ($response->getStatusCode() !== 200) {
             throw new LocalizedException(__('Something went wrong when get review s....'));
         }
 
         return $this->serializer->unserialize($response->getBody()->getContents());
-
     }
 
     private function isTokenExpired(string $token): bool
     {
         $jwtData = explode('.', $token)[1];
-        $jwtData = $this->serializer->unserialize(base64_decode($jwtData));
+        $jwtData = $this->serializer->unserialize($this->urlDecoder->decode($jwtData));
 
         $expirationTimestamp = $jwtData['exp'];
 
@@ -103,19 +129,15 @@ class Client
         return $this->config->getApiKey();
     }
 
-    private function getJwtToken(): ?string
-    {
-        return $this->cache->load(self::JWT_TOKEN_CACHE_KEY) ?: null;
-    }
-
     private function login(): void
     {
         $this->guzzleClient = $this->guzzleClientFactory->create([
             'config' => [
-                'base_uri' => self::BASE_URI
-            ]
+                'base_uri' => $this->config->getApiBaseUri(),
+            ],
         ]);
         $this->jwtToken = $this->getJwtToken();
+
         if ($this->jwtToken === null || $this->isTokenExpired($this->jwtToken)) {
             $response = $this->guzzleClient->post('/api/token/refresh', [
                 'form_params' => [
@@ -132,5 +154,10 @@ class Client
 
             $this->cache->save($this->jwtToken, self::JWT_TOKEN_CACHE_KEY, ['config'], 3600);
         }
+    }
+
+    private function getJwtToken(): ?string
+    {
+        return $this->cache->load(self::JWT_TOKEN_CACHE_KEY) ?: null;
     }
 }

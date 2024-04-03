@@ -2,28 +2,27 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Model\Command;
+namespace Sentimo\ReviewAnalysis\Model\Command;
 
-use CustomerFeel\ApiConnector\Model\Client;
-use CustomerFeel\ApiConnector\Model\Config;
-use CustomerFeel\ApiConnector\Model\ReviewAdapter;
-use CustomerFeel\ApiConnector\Model\ReviewProvider;
-use CustomerFeel\ApiConnector\Model\ReviewResource;
-use GuzzleHttp\Exception\GuzzleException;
+use Sentimo\ReviewAnalysis\Model\Adapter\ReviewAdapter;
+use Sentimo\ReviewAnalysis\Model\Client;
+use Sentimo\ReviewAnalysis\Model\Config;
+use Sentimo\ReviewAnalysis\Model\ReviewProvider;
+use Sentimo\ReviewAnalysis\Model\ReviewResource;
 
 class PostReviewsCommand
 {
     public function __construct(
-        private readonly Client         $client,
+        private readonly Client $client,
         private readonly ReviewProvider $reviewProvider,
-        private readonly ReviewAdapter  $adapter,
-        private readonly Config         $config,
+        private readonly ReviewAdapter $adapter,
+        private readonly Config $config,
         private readonly ReviewResource $reviewResource,
     ) {
     }
 
     /**
-     * @throws GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function execute(): void
     {
@@ -32,6 +31,7 @@ class PostReviewsCommand
         }
 
         $reviewsToPost = [];
+
         foreach ($this->reviewProvider->getReviewsToSync() as $review) {
             $reviewsToPost[] = $this->adapter->adaptTo($review);
         }

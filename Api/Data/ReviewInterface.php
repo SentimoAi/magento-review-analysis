@@ -2,19 +2,31 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Api\Data;
+namespace Sentimo\ReviewAnalysis\Api\Data;
 
 interface ReviewInterface
 {
     public function getContent(): string;
+
     public function setContent(string $content): self;
 
-    public function getSentiment(): ?int;
-    public function setSentiment(?int $sentiment): self;
+    public function getModerationStatus(): ?string;
 
-    public function getAuthor(): string;
-    public function setAuthor(string $author): self;
+    public function setModerationStatus(string $moderationStatus): self;
+
+    public function getAuthor(): AuthorInterface;
+
+    public function setAuthor(AuthorInterface $author): self;
 
     public function getExternalId(): ?string;
-    public function setExternalId(?string $externalId): self;
+
+    public function setExternalId(string $externalId): self;
+
+    public function setProduct(ProductInterface $product): self;
+
+    public function getProduct(): ?ProductInterface;
+
+    public function getRating(): ?int;
+
+    public function setRating(?int $rating): self;
 }

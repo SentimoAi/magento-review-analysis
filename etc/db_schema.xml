@@ -1,21 +1,16 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-
-    <table name="customerfeel_review_sync" resource="default" engine="innodb" comment="Review detail information">
+    <table name="sentimo_review_analysis_sync" resource="default" engine="innodb" comment="Review Analysis Sync information">
         <column xsi:type="bigint" name="review_id" unsigned="true" nullable="true" identity="false"
                 comment="Review ID"/>
         <column xsi:type="varchar" name="status" nullable="false" length="128" comment="Status"/>
 
-        <constraint xsi:type="foreign" referenceId="CUSTOMERFEEL_REVIEW_SYNC_REVIEW_ID_REVIEW_REVIEW_ID" table="customerfeel_review_sync"
+        <constraint xsi:type="foreign" referenceId="SENTIMO_REVIEW_ANALYSIS_SYNC_REVIEW_ID_REVIEW_REVIEW_ID" table="sentimo_review_analysis_sync"
                     column="review_id" referenceTable="review" referenceColumn="review_id" onDelete="CASCADE"/>
 
-        <constraint xsi:type="unique" referenceId="CUSTOMERFEEL_UNIQUE_REVIEW_SYNC_REVIEW_ID_REVIEW_ID">
+        <constraint xsi:type="unique" referenceId="SENTIMO_UNIQUE_REVIEW_ANALYSIS_SYNC_REVIEW_ID_REVIEW_ID">
             <column name="review_id"/>
         </constraint>
-
-<!--        <index referenceId="CUSTOMERFEEL_REVIEW_SYNC_REVIEW_ID" indexType="btree">-->
-<!--            <column name="review_id"/>-->
-<!--        </index>-->
     </table>
 </schema>

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Console\Command;
+namespace Sentimo\ReviewAnalysis\Console\Command;
 
-use CustomerFeel\ApiConnector\Model\Command\PostReviewsCommand as PostReviews;
-use CustomerFeel\ApiConnector\Model\Command\SyncReviewSentimentsCommand as SyncReviewSentiments;
+use Sentimo\ReviewAnalysis\Model\Command\PostReviewsCommand as PostReviews;
+use Sentimo\ReviewAnalysis\Model\Command\SyncReviewSentimentsCommand as SyncReviewSentiments;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,8 +22,8 @@ class SyncReviewSentimentsCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('customerfeel:sync-reviews');
-        $this->setDescription('Sync review sentiments from CustomerFeel');
+        $this->setName('sentimo:review-analysis:sync-reviews');
+        $this->setDescription('Sync review sentiments from Sentimo');
 
         parent::configure();
     }

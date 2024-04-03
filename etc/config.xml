@@ -2,10 +2,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <customer_feel>
+        <sentimo_review_analysis>
             <sync>
-                <active>0</active>
+                <enabled>0</enabled>
+                <api_base_uri>https://sentimoai.com</api_base_uri>
+                <channel>magento</channel>
             </sync>
-        </customer_feel>
+        </sentimo_review_analysis>
     </default>
 </config>

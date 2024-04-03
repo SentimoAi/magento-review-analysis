@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Model;
+namespace Sentimo\ReviewAnalysis\Model;
 
-use CustomerFeel\ApiConnector\Api\Data\ReviewInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Sentimo\ReviewAnalysis\Api\Data\AuthorInterface;
+use Sentimo\ReviewAnalysis\Api\Data\ProductInterface;
+use Sentimo\ReviewAnalysis\Api\Data\ReviewInterface;
 
-class Review implements ReviewInterface, \Serializable
+class Review implements ReviewInterface
 {
-    public function __construct(private readonly SerializerInterface $serializer)
-    {
-    }
-
     private string $content;
-    private ?int $sentiment = null;
-    private string $author;
-    private ?string $externalId;
+    private ?string $moderationStatus = null;
+    private AuthorInterface $author;
+    private string $externalId;
+    private ?ProductInterface $product;
+    private ?int $rating;
 
     public function getContent(): string
     {
@@ -26,78 +25,67 @@ class Review implements ReviewInterface, \Serializable
     public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
-    public function getSentiment(): ?int
-    {
-        return $this->sentiment;
-    }
-
-    public function setSentiment(?int $sentiment): self
-    {
-        $this->sentiment = $sentiment;
-        return $this;
-    }
-
-    public function getAuthor(): string
+    public function getAuthor(): AuthorInterface
     {
         return $this->author;
     }
 
-    public function setAuthor(string $author): self
+    public function setAuthor(AuthorInterface $author): self
     {
         $this->author = $author;
+
         return $this;
     }
 
-    public function getExternalId(): ?string
+    public function getExternalId(): string
     {
         return $this->externalId;
     }
 
-    public function setExternalId(?string $externalId): self
+    public function setExternalId(string $externalId): self
     {
         $this->externalId = $externalId;
+
         return $this;
     }
 
-    public function serialize(): string
+    public function getModerationStatus(): ?string
     {
-        return $this->serializer->serialize([
-            'content' => $this->content,
-            'sentiment' => $this->sentiment,
-            'author' => $this->author,
-            'externalId' => $this->externalId,
-        ]);
+        return $this->moderationStatus;
     }
 
-    public function unserialize(string $data): void
+    public function setModerationStatus(string $moderationStatus): ReviewInterface
     {
-        $unSerializedData = $this->serializer->unserialize($data);
+        $this->moderationStatus = $moderationStatus;
 
-        $this->content = $unSerializedData['content'];
-        $this->sentiment = $unSerializedData['sentiment'];
-        $this->author = $unSerializedData['author'];
-        $this->externalId = $unSerializedData['externalId'];
-
+        return $this;
     }
 
-    public function __serialize(): array
+    public function setProduct(ProductInterface $product): ReviewInterface
     {
-        return [
-            'content' => $this->content,
-            'sentiment' => $this->sentiment,
-            'author' => $this->author,
-            'externalId' => $this->externalId,
-        ];
+        $this->product = $product;
+
+        return $this;
     }
 
-    public function __unserialize(array $data): void
+    public function getProduct(): ?ProductInterface
     {
-        $this->setContent($data['content'])
-            ->setSentiment($data['sentiment'])
-            ->setAuthor($data['author'])
-            ->setExternalId($data['externalId']);
+        return $this->product;
+    }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?int $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
     }
 }

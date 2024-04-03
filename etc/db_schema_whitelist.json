@@ -1,14 +1,12 @@
 {
-    "customerfeel_review_sync": {
+    "sentimo_review_analysis_sync": {
         "column": {
             "review_id": true,
             "status": true
         },
-        "index": {
-            "CUSTOMERFEEL_REVIEW_SYNC_REVIEW_ID": true
-        },
         "constraint": {
-            "CUSTOMERFEEL_REVIEW_SYNC_REVIEW_ID_REVIEW_REVIEW_ID": true
+            "SENTIMO_REVIEW_ANALYSIS_SYNC_REVIEW_ID_REVIEW_REVIEW_ID": true,
+            "SENTIMO_REVIEW_ANALYSIS_SYNC_REVIEW_ID": true
         }
     }
 }

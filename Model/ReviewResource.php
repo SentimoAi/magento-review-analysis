@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Model;
+namespace Sentimo\ReviewAnalysis\Model;
 
 use Magento\Framework\App\ResourceConnection;
 
@@ -11,15 +11,23 @@ class ReviewResource
     public const STATUS_IN_PROGRESS = 'in_progress';
     public const STATUS_SYNCED = 'synced';
 
-    public const TABLE_NAME = 'customerfeel_review_sync';
+    public const TABLE_NAME = 'sentimo_review_analysis_sync';
 
-    public function __construct(private readonly ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        private readonly ResourceConnection $resourceConnection
+    ) {
     }
 
+    /**
+     * @param int[] $reviewIds
+     * @param string $status
+     *
+     * @return void
+     */
     public function updateReviewsStatus(array $reviewIds, string $status): void
     {
         $data = [];
+
         foreach ($reviewIds as $reviewId) {
             $data[] = ['review_id' => $reviewId, 'status' => $status];
         }

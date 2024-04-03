@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CustomerFeel\ApiConnector\Model\Command;
+namespace Sentimo\ReviewAnalysis\Model\Command;
 
-use CustomerFeel\ApiConnector\Model\Client;
-use CustomerFeel\ApiConnector\Model\Config;
-use CustomerFeel\ApiConnector\Model\ReviewAdapter;
-use CustomerFeel\ApiConnector\Model\ReviewProvider;
-use CustomerFeel\ApiConnector\Model\ReviewResource;
 use GuzzleHttp\Exception\GuzzleException;
+use Sentimo\ReviewAnalysis\Model\Adapter\ReviewAdapter;
+use Sentimo\ReviewAnalysis\Model\Client;
+use Sentimo\ReviewAnalysis\Model\Config;
+use Sentimo\ReviewAnalysis\Model\ReviewProvider;
+use Sentimo\ReviewAnalysis\Model\ReviewResource;
 
 class SyncReviewSentimentsCommand
 {
