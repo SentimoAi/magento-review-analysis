@@ -28,8 +28,10 @@ class SyncReviewSentimentsCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->syncReviewSentimentsCommand->execute();
+
+        return self::SUCCESS;
     }
 }

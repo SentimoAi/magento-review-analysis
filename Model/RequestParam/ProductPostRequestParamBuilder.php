@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Model\RequestParam;
 
-use Sentimo\ReviewAnalysis\Api\Data\ReviewInterface;
+use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface;
 
-class ProductRequestParamBuilder implements ReviewRequestParamBuilderInterface
+class ProductPostRequestParamBuilder implements ReviewPostRequestParamBuilderInterface
 {
     /**
      * @inheritDoc
      */
-    public function buildRequestParam(ReviewInterface $review): array
+    public function buildRequestParam(SentimoReviewInterface $review): array
     {
         $product = $review->getProduct();
 

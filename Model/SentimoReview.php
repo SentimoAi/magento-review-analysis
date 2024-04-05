@@ -6,9 +6,9 @@ namespace Sentimo\ReviewAnalysis\Model;
 
 use Sentimo\ReviewAnalysis\Api\Data\AuthorInterface;
 use Sentimo\ReviewAnalysis\Api\Data\ProductInterface;
-use Sentimo\ReviewAnalysis\Api\Data\ReviewInterface;
+use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface;
 
-class Review implements ReviewInterface
+class SentimoReview implements SentimoReviewInterface
 {
     private string $content;
     private ?string $moderationStatus = null;
@@ -58,14 +58,14 @@ class Review implements ReviewInterface
         return $this->moderationStatus;
     }
 
-    public function setModerationStatus(string $moderationStatus): ReviewInterface
+    public function setModerationStatus(string $moderationStatus): SentimoReviewInterface
     {
         $this->moderationStatus = $moderationStatus;
 
         return $this;
     }
 
-    public function setProduct(ProductInterface $product): ReviewInterface
+    public function setProduct(ProductInterface $product): SentimoReviewInterface
     {
         $this->product = $product;
 

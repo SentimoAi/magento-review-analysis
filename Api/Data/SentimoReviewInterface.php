@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Api\Data;
 
-interface ReviewInterface
+interface SentimoReviewInterface
 {
     public function getContent(): string;
 

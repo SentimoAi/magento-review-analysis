@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Model\Command;
 
-use GuzzleHttp\Exception\GuzzleException;
-use Sentimo\ReviewAnalysis\Model\Adapter\ReviewAdapter;
+use Magento\Framework\App\ResourceConnection;
 use Sentimo\ReviewAnalysis\Model\Client;
 use Sentimo\ReviewAnalysis\Model\Config;
-use Sentimo\ReviewAnalysis\Model\ReviewProvider;
-use Sentimo\ReviewAnalysis\Model\ReviewResource;
+use Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilderInterface;
+use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync;
+use Sentimo\ReviewAnalysis\Model\ReviewAnalysisSync as ReviewAnalysisSyncModel;
+use Sentimo\ReviewAnalysis\Model\ReviewStatusHandler;
 
 class SyncReviewSentimentsCommand
 {
     public function __construct(
-        private readonly Client         $client,
-        private readonly ReviewProvider $reviewProvider,
-        private readonly ReviewAdapter  $adapter,
-        private readonly Config         $config,
-        private readonly ReviewResource $reviewStatus,
+        private readonly Client $client,
+        private readonly ReviewGetRequestParamBuilderInterface $reviewGetRequestParamBuilder,
+        private readonly Config $config,
+        private readonly ReviewStatusHandler $reviewStatusHandler,
+        private readonly ResourceConnection $resourceConnection,
+        private readonly ReviewAnalysisSync $reviewAnalysisSyncResource,
     ) {
     }
 
     /**
-     * @throws GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function execute(): void
     {
@@ -31,9 +33,41 @@ class SyncReviewSentimentsCommand
             return;
         }
 
-        $reviews = [];
-        foreach ($this->client->getReviews() as $review) {
-            $reviews[] = $this->adapter->adaptFrom($review);
+        $sentimoReviews = $this->client->getReviews($this->reviewGetRequestParamBuilder->buildRequestParam(), true);
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            $this->reviewStatusHandler->updateStatuses($sentimoReviews);
+            $this->reviewAnalysisSyncResource->updateReviewsStatus(
+                $this->getReviewIds($sentimoReviews),
+                ReviewAnalysisSyncModel::STATUS_COMPLETE
+            );
+        } catch (\Throwable $exception) {
+            $connection->rollBack();
+
+            throw $exception;
         }
+
+        $connection->commit();
+    }
+
+    /**
+     * @param array<string,string|int|string[]> $sentimoReviews
+     *
+     * @return int[]
+     */
+    private function getReviewIds(array $sentimoReviews): array
+    {
+        $reviewIds = [];
+
+        foreach ($sentimoReviews as $sentimoReview) {
+            if (isset($sentimoReview['externalId'])) {
+                $reviewIds[] = $sentimoReview['externalId'];
+            }
+        }
+
+        return $reviewIds;
     }
 }

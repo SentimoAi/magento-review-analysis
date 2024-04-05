@@ -11,10 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Url\DecoderInterface;
 use Psr\Log\LoggerInterface;
-use Sentimo\ReviewAnalysis\Model\RequestParam\CompositeReviewRequestParamBuilder;
+use Sentimo\ReviewAnalysis\Model\RequestParam\CompositeReviewPostRequestParamBuilder;
 
 use function __;
 use function explode;
+use function is_array;
+use function parse_str;
+use function parse_url;
 use function sprintf;
 use function time;
 
@@ -43,13 +46,13 @@ class Client
         private readonly SerializerInterface $serializer,
         private readonly DecoderInterface $urlDecoder,
         private readonly Config $config,
-        private readonly CompositeReviewRequestParamBuilder $compositeReviewRequestParamBuilder,
+        private readonly CompositeReviewPostRequestParamBuilder $compositeReviewRequestParamBuilder,
     ) {
         $this->login();
     }
 
     /**
-     * @param \Sentimo\ReviewAnalysis\Api\Data\ReviewInterface[] $reviews
+     * @param \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface[] $reviews
      *
      * @return int[]
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -93,25 +96,66 @@ class Client
     }
 
     /**
-     * @return array
+     * @param array<string,string|int|string[]> $queryParams
+     * @param bool $fetchAll
+     *
+     * @return array<string,string|int|string[]>
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getReviews(): array
+    public function getReviews(array $queryParams, bool $fetchAll = false): array
     {
-        $response = $this->guzzleClient->get('/api/reviews', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->jwtToken,
-                'Accept' => 'application/json',
-                'Content-type' => 'application/json',
-            ],
-        ]);
+        $allReviews = [];
 
-        if ($response->getStatusCode() !== 200) {
-            throw new LocalizedException(__('Something went wrong when get review s....'));
-        }
+        do {
+            $response = $this->guzzleClient->get('/api/reviews', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->jwtToken,
+                    'Accept' => 'application/ld+json',
+                    'Content-type' => 'application/ld+json',
+                ],
+                'query' => $queryParams,
+            ]);
 
-        return $this->serializer->unserialize($response->getBody()->getContents());
+            // Check for a successful response
+            if ($response->getStatusCode() !== 200) {
+                throw new LocalizedException(
+                    __(
+                        'Failed to fetch reviews, HTTP Status Code: %1',
+                        $response->getStatusCode()
+                    )
+                );
+            }
+
+            $content = $response->getBody()->getContents();
+            $decodedContent = $this->serializer->unserialize($content);
+
+            // Ensure the decoded content has the expected structure
+            if (!isset($decodedContent['hydra:member']) || !is_array($decodedContent['hydra:member'])) {
+                throw new LocalizedException(__('Unexpected response structure.'));
+            }
+
+            $reviews = $decodedContent['hydra:member'];
+
+            foreach ($reviews as $review) {
+                $allReviews[] = $review;
+            }
+
+            // Determine if there's a next page
+            $nextPage = $decodedContent['hydra:view']['hydra:next'] ?? null;
+
+            if ($fetchAll && $nextPage) {
+                parse_str(parse_url($nextPage, PHP_URL_QUERY), $nextPageParams); //phpcs:ignore
+
+                foreach ($nextPageParams as $key => $value) {
+                    $queryParams[$key] = $value;
+                }
+            } else {
+                $nextPage = null;
+            }
+        } while ($fetchAll && $nextPage);
+
+        return $allReviews;
     }
 
     private function isTokenExpired(string $token): bool

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Model\RequestParam;
 
-use Sentimo\ReviewAnalysis\Api\Data\ReviewInterface;
+use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface;
 use Sentimo\ReviewAnalysis\Model\Config;
 
-class ReviewRequestParamBuilder implements ReviewRequestParamBuilderInterface
+class ReviewPostRequestParamBuilder implements ReviewPostRequestParamBuilderInterface
 {
     public function __construct(
         private readonly Config $config
@@ -17,7 +17,7 @@ class ReviewRequestParamBuilder implements ReviewRequestParamBuilderInterface
     /**
      * @inheritDoc
      */
-    public function buildRequestParam(ReviewInterface $review): array
+    public function buildRequestParam(SentimoReviewInterface $review): array
     {
         return [
             'content' => $review->getContent(),
