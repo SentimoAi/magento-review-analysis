@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Console\Command;
 
-use Sentimo\ReviewAnalysis\Model\Command\PostReviewsCommand as PostReviews;
-use Sentimo\ReviewAnalysis\Model\Command\SyncReviewSentimentsCommand as SyncReviewSentiments;
+use Sentimo\ReviewAnalysis\Model\Command\SyncReviewsCommand as SyncReviewsCommandModel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SyncReviewSentimentsCommand extends Command
+class SyncReviewsCommand extends Command
 {
-    public function __construct(private readonly SyncReviewSentiments $syncReviewSentimentsCommand)
-    {
+    public function __construct(
+        private readonly SyncReviewsCommandModel $syncReviewsCommand
+    ) {
         parent::__construct();
     }
 
@@ -30,7 +30,7 @@ class SyncReviewSentimentsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->syncReviewSentimentsCommand->execute();
+        $this->syncReviewsCommand->execute();
 
         return self::SUCCESS;
     }

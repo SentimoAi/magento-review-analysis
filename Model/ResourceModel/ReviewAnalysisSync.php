@@ -21,6 +21,10 @@ class ReviewAnalysisSync extends AbstractDb
         $data = [];
 
         foreach ($reviewIds as $reviewId) {
+            if ($reviewId === null) {
+                continue;
+            }
+
             $data[] = ['review_id' => $reviewId, 'status' => $status];
         }
 

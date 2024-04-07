@@ -30,12 +30,13 @@ class Client
     private ?\GuzzleHttp\Client $guzzleClient = null;
 
     /**
-     * Todo : custom logger
-     *
      * @param \GuzzleHttp\ClientFactory $guzzleClientFactory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
+     * @param \Sentimo\ReviewAnalysis\Model\Config $config
+     * @param \Sentimo\ReviewAnalysis\Model\RequestParam\CompositeReviewPostRequestParamBuilder $compositeReviewRequestParamBuilder
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -48,7 +49,6 @@ class Client
         private readonly Config $config,
         private readonly CompositeReviewPostRequestParamBuilder $compositeReviewRequestParamBuilder,
     ) {
-        $this->login();
     }
 
     /**
@@ -59,9 +59,14 @@ class Client
      */
     public function postReviews(array $reviews): array
     {
+        $this->login();
         $postedReviewIds = [];
 
         foreach ($reviews as $review) {
+            $responseBody = '';
+            $errorOccurred = false;
+            $errorMessage = '';
+
             try {
                 $response = $this->guzzleClient->post('/api/reviews', [
                     'headers' => [
@@ -72,26 +77,46 @@ class Client
                     'json' => $this->compositeReviewRequestParamBuilder->buildRequestParam($review),
                 ]);
 
+                $responseBody = $response->getBody()->getContents();
+
                 if ($response->getStatusCode() !== 201) {
-                    throw new LocalizedException(__($response->getBody()->getContents()));
+                    throw new LocalizedException(
+                        __(
+                            'Failed to post review, HTTP Status Code: %1',
+                            $response->getStatusCode()
+                        )
+                    );
                 }
 
-                $postedReviewIds[] = $review->getExternalId();
+                $responseData = $this->serializer->unserialize($responseBody);
+                $externalId = $responseData['externalId'] ?? null;
+
+                if ($externalId === null) {
+                    throw new LocalizedException(__('External ID not found in response: %1', $responseBody));
+                }
+
+                $postedReviewIds[] = $externalId;
             } catch (RequestException $exception) {
-                $this->logger->error(
-                    sprintf(
-                        'Something went wrong when posting review with id = %s
-                        make sure a review with the same external id does not exist in the platform.',
-                        $review->getExternalId()
-                    ),
-                    $exception->getTrace()
-                );
+                $responseBody = $exception->getResponse()?->getBody()->getContents() ?? 'No response body';
+                $errorOccurred = true;
+                $errorMessage = $exception->getMessage();
             } catch (\Throwable $exception) {
-                $this->logger->critical($exception->getMessage(), $exception->getTrace());
+                $errorOccurred = true;
+                $errorMessage = $exception->getMessage();
+            } finally {
+                if ($errorOccurred) {
+                    $this->logger->error(
+                        sprintf(
+                            'Error posting review with external ID = %s: %s Response: %s',
+                            $review->getExternalId() ?? 'N/A',
+                            $errorMessage,
+                            $responseBody
+                        )
+                    );
+                }
             }
         }
 
-        //Todo : handle errors
         return $postedReviewIds;
     }
 
@@ -105,6 +130,7 @@ class Client
      */
     public function getReviews(array $queryParams, bool $fetchAll = false): array
     {
+        $this->login();
         $allReviews = [];
 
         do {

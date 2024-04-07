@@ -6,29 +6,32 @@ namespace Sentimo\ReviewAnalysis\Model;
 
 use Magento\Review\Model\ResourceModel\Review as ReviewResource;
 use Magento\Review\Model\Review;
+use Magento\Review\Model\ReviewFactory;
 
 class ReviewStatusHandler
 {
     public function __construct(
-        private readonly ReviewResource $reviewResource
+        private readonly ReviewResource $reviewResource,
+        private readonly ReviewFactory $reviewFactory
     ) {
     }
 
     /**
-     * @param array<string, string|int|string[]> $sentimoReviews
+     * @param array<string,string[]> $sentimoReviews
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function updateStatuses(array $sentimoReviews): void
     {
-        $connection = $this->reviewResource->getConnection();
+        foreach ($sentimoReviews as $sentimoReview) {
+            $review = $this->reviewFactory->create();
+            $this->reviewResource->load($review, $sentimoReview['externalId']); //phpcs:ignore
 
-        foreach ($sentimoReviews as $review) {
-            $bind = ['status_id' => $this->mapStatusToMagento($review['moderationStatus'])];
-            $where = ['review_id = ?' => $review['externalId']];
+            $review->setStatusId($this->mapStatusToMagento($sentimoReview['moderationStatus']));
 
-            $connection->update($this->reviewResource->getMainTable(), $bind, $where);
+            $this->reviewResource->save($review); //phpcs:ignore
+            $review->aggregate();
         }
     }
 

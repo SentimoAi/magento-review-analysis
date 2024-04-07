@@ -26,6 +26,14 @@
                 <field id="channel" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Channel</label>
                 </field>
+                <field id="post_review_frequency" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Post Review Frequency</label>
+                    <comment>Cron Expression</comment>
+                </field>
+                <field id="sync_review_frequency" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Sync Review Frequency</label>
+                    <comment>Cron Expression</comment>
+                </field>
             </group>
             <group id="date_range" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1">
                 <label>Date Range for Review Sync</label>

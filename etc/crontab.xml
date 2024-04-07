@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="sentimo_review_analysis_post_review" instance="Sentimo\ReviewAnalysis\Cron\PostReviews" method="execute">
+            <config_path>sentimo_review_analysis/sync/post_review_frequency</config_path>
+        </job>
+        <job name="sentimo_review_analysis_sync_review" instance="Sentimo\ReviewAnalysis\Cron\SyncReviews" method="execute">
+            <config_path>sentimo_review_analysis/sync/sync_review_frequency</config_path>
+        </job>
+    </group>
+</config>

@@ -8,11 +8,34 @@
     <preference for="Sentimo\ReviewAnalysis\Api\ReviewProviderInterface" type="Sentimo\ReviewAnalysis\Model\ReviewProvider" />
     <preference for="Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilderInterface" type="Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilder" />
 
+    <virtualType name="SentimoHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/sentimo.log</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SentimoLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">sentimoLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="sentimo" xsi:type="object">SentimoHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Sentimo\ReviewAnalysis\Model\Client">
+        <arguments>
+            <argument name="logger" xsi:type="object">SentimoLogger</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="sentimo_review_analysis_post_review_command" xsi:type="object">Sentimo\ReviewAnalysis\Console\Command\PostReviewsCommand</item>
-                <item name="sentimo_review_analysis_sync_review_sentiment_command" xsi:type="object">Sentimo\ReviewAnalysis\Console\Command\SyncReviewSentimentsCommand</item>
+                <item name="sentimo_review_analysis_sync_review_sentiment_command" xsi:type="object">
+                    Sentimo\ReviewAnalysis\Console\Command\SyncReviewsCommand
+                </item>
             </argument>
         </arguments>
     </type>
@@ -21,7 +44,7 @@
             <argument name="postReviewsCommand" xsi:type="object">Sentimo\ReviewAnalysis\Model\Command\PostReviewsCommand\Proxy</argument>
         </arguments>
     </type>
-    <type name="Sentimo\ReviewAnalysis\Console\Command\SyncReviewSentimentsCommand">
+    <type name="Sentimo\ReviewAnalysis\Console\Command\SyncReviewsCommand">
         <arguments>
             <argument name="syncReviewSentimentsCommand" xsi:type="object">Sentimo\ReviewAnalysis\Model\Command\SyncReviewSentimentsCommand\Proxy</argument>
         </arguments>

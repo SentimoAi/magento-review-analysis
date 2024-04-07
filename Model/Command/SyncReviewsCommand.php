@@ -12,7 +12,7 @@ use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync;
 use Sentimo\ReviewAnalysis\Model\ReviewAnalysisSync as ReviewAnalysisSyncModel;
 use Sentimo\ReviewAnalysis\Model\ReviewStatusHandler;
 
-class SyncReviewSentimentsCommand
+class SyncReviewsCommand
 {
     public function __construct(
         private readonly Client $client,
