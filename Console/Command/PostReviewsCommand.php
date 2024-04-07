@@ -28,9 +28,21 @@ class PostReviewsCommand extends Command
         parent::configure();
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    //phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $output->writeln('<info>Posting reviews to Sentimo...</info>');
+
         $this->postReviewsCommand->execute();
+
+        $output->writeln('<info>Reviews posted to Sentimo.</info>');
 
         return self::SUCCESS;
     }

@@ -28,9 +28,21 @@ class SyncReviewsCommand extends Command
         parent::configure();
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    //phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $output->writeln('<info>Syncing review sentiments from Sentimo...</info>');
+
         $this->syncReviewsCommand->execute();
+
+        $output->writeln('<info>Review sentiments synced from Sentimo.</info>');
 
         return self::SUCCESS;
     }
