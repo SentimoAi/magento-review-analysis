@@ -1,13 +1,16 @@
 {
   "name": "sentimo/review-analysis",
-  "version": "1.0.0",
   "description": "Sentimo Review Analysis",
   "type": "magento2-module",
   "require": {
-    "magento/framework": ">2.4.4"
+      "php": ">=8.1",
+    "magento/framework": "~2.4.4"
   },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
   "license": [
-    "Proprietary"
+    "MIT"
   ],
   "autoload": {
     "files": [
