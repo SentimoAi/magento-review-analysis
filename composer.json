@@ -1,5 +1,6 @@
 {
   "name": "sentimo/review-analysis",
+  "version": "1.0.0",
   "description": "Sentimo Review Analysis",
   "type": "magento2-module",
   "require": {
