@@ -1,5 +1,5 @@
 # Sentimo Review Analysis Module for Magento 2
-The Sentimo Review Analysis module integrates your Magento 2 store with the Sentimo API, providing advanced sentiment analysis of customer reviews. This module automates the process of analyzing review sentiments and updating review statuses based on the sentiment scores.
+The Sentimo Review Analysis module integrates your Magento 2 store with [Sentimo](https://sentimoai.com), an advanced platform providing sentiment analysis of customer reviews. By leveraging Sentimo's AI-driven insights, this module automates the process of analyzing review sentiments and updating review statuses based on sentiment scores, directly within your Magento backend.
 
 ## Installation
 To install the Sentimo Review Analysis module in your Magento 2 store, execute the following commands from the root directory of your Magento installation:
