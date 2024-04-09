@@ -33,9 +33,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="sentimo_review_analysis_post_review_command" xsi:type="object">Sentimo\ReviewAnalysis\Console\Command\PostReviewsCommand</item>
-                <item name="sentimo_review_analysis_sync_review_sentiment_command" xsi:type="object">
-                    Sentimo\ReviewAnalysis\Console\Command\SyncReviewsCommand
-                </item>
+                <item name="sentimo_review_analysis_sync_review_sentiment_command" xsi:type="object">Sentimo\ReviewAnalysis\Console\Command\SyncReviewsCommand</item>
             </argument>
         </arguments>
     </type>
@@ -46,7 +44,7 @@
     </type>
     <type name="Sentimo\ReviewAnalysis\Console\Command\SyncReviewsCommand">
         <arguments>
-            <argument name="syncReviewSentimentsCommand" xsi:type="object">Sentimo\ReviewAnalysis\Model\Command\SyncReviewSentimentsCommand\Proxy</argument>
+            <argument name="syncReviewsCommand" xsi:type="object">Sentimo\ReviewAnalysis\Model\Command\SyncReviewsCommand\Proxy</argument>
         </arguments>
     </type>
 
