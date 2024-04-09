@@ -21,10 +21,10 @@ use function json_encode;
 
 class ClientTest extends TestCase
 {
-    private $client;
-    private $guzzleClientMock;
-    private $serializerMock;
-    private $compositeReviewRequestParamBuilderMock;
+    private Client $client;
+    private GuzzleClient $guzzleClientMock;
+    private SerializerInterface $serializerMock;
+    private CompositeReviewPostRequestParamBuilder $compositeReviewRequestParamBuilderMock;
 
     public function testPostReviewsSuccessfullyPostsReviews(): void
     {

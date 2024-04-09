@@ -10,6 +10,10 @@ use Magento\Review\Model\ReviewFactory;
 
 class ReviewStatusHandler
 {
+    /**
+     * @param \Magento\Review\Model\ResourceModel\Review $reviewResource
+     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+     */
     public function __construct(
         private readonly ReviewResource $reviewResource,
         private readonly ReviewFactory $reviewFactory
@@ -35,6 +39,11 @@ class ReviewStatusHandler
         }
     }
 
+    /**
+     * @param string $sentimoStatus
+     *
+     * @return int
+     */
     private function mapStatusToMagento(string $sentimoStatus): int
     {
         $statusMap = [

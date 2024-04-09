@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sentimo\ReviewAnalysis\Model;
 
 use Magento\Framework\Model\AbstractModel;
+use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync as ReviewAnalysisSyncResource;
 
 class ReviewAnalysisSync extends AbstractModel
 {
@@ -13,6 +14,6 @@ class ReviewAnalysisSync extends AbstractModel
 
     protected function _construct()
     {
-        $this->_init(\Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync::class);
+        $this->_init(ReviewAnalysisSyncResource::class);
     }
 }

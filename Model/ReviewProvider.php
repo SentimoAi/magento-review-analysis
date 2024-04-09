@@ -9,9 +9,13 @@ use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync;
 use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync\CollectionFactory as ReviewAnalysisSyncCollectionFactory;
 use Sentimo\ReviewAnalysis\Model\ReviewAnalysisSync as ReviewAnalysisSyncModel;
-
 class ReviewProvider implements ReviewProviderInterface
 {
+    /**
+     * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory
+     * @param \Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync\CollectionFactory $reviewAnalysisCollectionFactory
+     * @param \Sentimo\ReviewAnalysis\Model\Config $config
+     */
     public function __construct(
         private readonly Collectionfactory $reviewCollectionFactory,
         private readonly ReviewAnalysisSyncCollectionFactory $reviewAnalysisCollectionFactory,

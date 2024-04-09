@@ -24,6 +24,7 @@ class PostReviewsCommand
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(): void
     {

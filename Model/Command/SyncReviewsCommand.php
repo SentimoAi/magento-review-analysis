@@ -14,6 +14,14 @@ use Sentimo\ReviewAnalysis\Model\ReviewStatusHandler;
 
 class SyncReviewsCommand
 {
+    /**
+     * @param \Sentimo\ReviewAnalysis\Model\Client $client
+     * @param \Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilderInterface $reviewGetRequestParamBuilder
+     * @param \Sentimo\ReviewAnalysis\Model\Config $config
+     * @param \Sentimo\ReviewAnalysis\Model\ReviewStatusHandler $reviewStatusHandler
+     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param \Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync $reviewAnalysisSyncResource
+     */
     public function __construct(
         private readonly Client $client,
         private readonly ReviewGetRequestParamBuilderInterface $reviewGetRequestParamBuilder,
@@ -26,6 +34,9 @@ class SyncReviewsCommand
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Throwable
      */
     public function execute(): void
     {

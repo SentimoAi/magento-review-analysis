@@ -14,11 +14,17 @@ class Author implements AuthorInterface
     ) {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getNickname(): string
     {
          return $this->nickname;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getExternalId(): ?string
     {
         return $this->externalId;

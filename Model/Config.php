@@ -17,17 +17,27 @@ class Config
     private const XML_CONFIG_PATH_SYNC_CHANNEL = 'sentimo_review_analysis/sync/channel';
     private const XML_CONFIG_PATH_SYNC_API_BASE_URI = 'sentimo_review_analysis/sync/api_base_uri';
 
+    /**
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     */
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly EncryptorInterface $encryptor,
     ) {
     }
 
+    /**
+     * @return bool
+     */
     public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_CONFIG_PATH_ACTIVE, ScopeInterface::SCOPE_WEBSITE);
     }
 
+    /**
+     * @return string
+     */
     public function getApiKey(): string
     {
         return $this->encryptor->decrypt(
@@ -35,21 +45,33 @@ class Config
         );
     }
 
+    /**
+     * @return string|null
+     */
     public function getFromDate(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_CONFIG_PATH_SYNC_FROM_DATE, ScopeInterface::SCOPE_WEBSITE);
     }
 
+    /**
+     * @return string|null
+     */
     public function getToDate(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_CONFIG_PATH_SYNC_TO_DATE, ScopeInterface::SCOPE_WEBSITE);
     }
 
+    /**
+     * @return string|null
+     */
     public function getChannel(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_CONFIG_PATH_SYNC_CHANNEL, ScopeInterface::SCOPE_WEBSITE);
     }
 
+    /**
+     * @return string
+     */
     public function getApiBaseUri(): string
     {
         return $this->scopeConfig->getValue(self::XML_CONFIG_PATH_SYNC_API_BASE_URI, ScopeInterface::SCOPE_WEBSITE);

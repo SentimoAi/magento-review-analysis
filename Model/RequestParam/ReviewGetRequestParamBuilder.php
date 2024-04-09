@@ -8,6 +8,9 @@ use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 
 class ReviewGetRequestParamBuilder implements ReviewGetRequestParamBuilderInterface
 {
+    /**
+     * @param \Sentimo\ReviewAnalysis\Api\ReviewProviderInterface $reviewProvider
+     */
     public function __construct(
         private readonly ReviewProviderInterface $reviewProvider
     ) {

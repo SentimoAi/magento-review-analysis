@@ -6,17 +6,22 @@ namespace Sentimo\ReviewAnalysis\Model\Adapter;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory as VoteCollectionFactory;
 use Magento\Review\Model\Review;
-use Ramsey\Collection\Exception\NoSuchElementException;
 use Sentimo\ReviewAnalysis\Api\Data\AuthorInterfaceFactory;
 use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface;
 use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterfaceFactory;
 
 class ReviewAdapter
 {
-    private const REVIEW_RATING_ID = 4;
-
+    /**
+     * @param \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterfaceFactory $sentimoReviewFactory
+     * @param \Sentimo\ReviewAnalysis\Api\Data\AuthorInterfaceFactory $authorFactory
+     * @param \Sentimo\ReviewAnalysis\Model\Adapter\ProductAdapter $productAdapter
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $voteCollectionFactory
+     */
     public function __construct(
         private readonly SentimoReviewInterfaceFactory $sentimoReviewFactory,
         private readonly AuthorInterfaceFactory $authorFactory,
@@ -26,6 +31,12 @@ class ReviewAdapter
     ) {
     }
 
+    /**
+     * @param \Magento\Review\Model\Review $review
+     *
+     * @return \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function adaptTo(Review $review): SentimoReviewInterface
     {
         /** @var \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface $adapteeReview */
@@ -52,7 +63,7 @@ class ReviewAdapter
     {
         try {
             return $this->productRepository->getById((int) $review->getEntityPkValue());
-        } catch (NoSuchElementException $exception) {
+        } catch (NoSuchEntityException $exception) {
             return null;
         }
     }
