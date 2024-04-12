@@ -7,6 +7,7 @@ namespace Sentimo\ReviewAnalysis\Block\Adminhtml\Grid\Renderer;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
+use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Helper\Data;
 use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
@@ -40,9 +41,9 @@ class Status extends AbstractRenderer
     /**
      * @param \Magento\Framework\DataObject $row
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
-    public function render(DataObject $row): string
+    public function render(DataObject $row): Phrase|string
     {
         $reviewAnalysisIds = $this->reviewProvider->getReviewAnalysisSyncCompleteReviewIds();
 
