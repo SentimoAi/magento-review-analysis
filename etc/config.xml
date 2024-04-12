@@ -6,7 +6,7 @@
             <sync>
                 <enabled>0</enabled>
                 <api_base_uri>https://sentimoai.com</api_base_uri>
-                <base_uri>https://sentimoai.com</base_uri>
+                <base_uri>https://dashboard.sentimoai.com</base_uri>
                 <channel>magento</channel>
                 <post_review_frequency>*/5 * * * *</post_review_frequency>
                 <sync_review_frequency>*/5 * * * *</sync_review_frequency>
