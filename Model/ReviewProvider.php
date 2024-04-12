@@ -65,7 +65,7 @@ class ReviewProvider implements ReviewProviderInterface
     }
 
     /**
-     * @return int[]
+     * @inheritDoc
      */
     public function getReviewAnalysisSyncCompleteReviewIds(): array
     {
