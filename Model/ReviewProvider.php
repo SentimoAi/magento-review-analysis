@@ -9,6 +9,7 @@ use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync;
 use Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync\CollectionFactory as ReviewAnalysisSyncCollectionFactory;
 use Sentimo\ReviewAnalysis\Model\ReviewAnalysisSync as ReviewAnalysisSyncModel;
+
 class ReviewProvider implements ReviewProviderInterface
 {
     /**
@@ -61,5 +62,15 @@ class ReviewProvider implements ReviewProviderInterface
             ->addFieldToFilter('status', ReviewAnalysisSyncModel::STATUS_IN_PROGRESS);
 
         return $collection->getColumnValues('review_id');
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getReviewAnalysisSyncCompleteReviewIds(): array
+    {
+        return $this->reviewAnalysisCollectionFactory->create()
+            ->addFieldToFilter('status', ReviewAnalysisSyncModel::STATUS_COMPLETE)
+            ->getAllIds();
     }
 }

@@ -12,7 +12,7 @@ class ReviewAnalysisSync extends AbstractModel
     public const STATUS_IN_PROGRESS = 'in_progress';
     public const STATUS_COMPLETE = 'complete';
 
-    protected function _construct()
+    protected function _construct() //phpcs:ignore
     {
         $this->_init(ReviewAnalysisSyncResource::class);
     }
