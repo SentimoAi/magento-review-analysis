@@ -15,4 +15,9 @@ interface ReviewProviderInterface
      * @return int[]
      */
     public function getSyncInProgressReviewIds(): array;
+
+    /**
+     * @return int[]
+     */
+    public function getReviewAnalysisSyncCompleteReviewIds(): array;
 }
