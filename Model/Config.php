@@ -16,6 +16,7 @@ class Config
     private const XML_CONFIG_PATH_SYNC_TO_DATE = 'sentimo_review_analysis/date_range/to_date';
     private const XML_CONFIG_PATH_SYNC_CHANNEL = 'sentimo_review_analysis/sync/channel';
     private const XML_CONFIG_PATH_SYNC_API_BASE_URI = 'sentimo_review_analysis/sync/api_base_uri';
+    private const XML_CONFIG_PATH_SYNC_BASE_URI = 'sentimo_review_analysis/sync/base_uri';
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -75,5 +76,13 @@ class Config
     public function getApiBaseUri(): string
     {
         return $this->scopeConfig->getValue(self::XML_CONFIG_PATH_SYNC_API_BASE_URI, ScopeInterface::SCOPE_WEBSITE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseUri(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_CONFIG_PATH_SYNC_BASE_URI, ScopeInterface::SCOPE_WEBSITE);
     }
 }
