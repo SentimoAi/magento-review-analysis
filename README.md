@@ -10,6 +10,20 @@ To install the Sentimo Review Analysis module in your Magento 2 store, execute t
     bin/magento cache:clean
 ```
 
+## Generating a Sentimo API Key
+
+Before you can configure the Sentimo Review Analysis module, you need an API key from Sentimo. Here's how you can generate one:
+
+1. **Log in to your Sentimo account** at [Sentimo](https://dashboard.sentimoai.com/login).
+2. Navigate to the **Api Keys** section located in the side navigation menu under **COMPANY & USER MANAGEMENT**.
+3. Click on the **Create Api Key** button at the top right of the API Keys page.
+4. Fill in the necessary details for your API key. Assign a descriptive name that helps you identify its usage, such as "Magento Store Integration".
+5. Once the form is completed, click **Save** or **Create** to generate your new API key.
+6. Your new API key will appear in the list, labeled with the name you've assigned. Click the **...** (more actions) button to view and copy your API key.
+7. **Important**: Store this API key securely. It is your private key for all API requests from your Magento store to Sentimo.
+
+Ensure to copy your API key and keep it secure, as you will need to enter this key in the Magento Admin Panel during the configuration of the Sentimo Review Analysis module.
+
 ## Configuration
 After installing the module, you can configure it from the Magento Admin Panel by navigating to:
 
