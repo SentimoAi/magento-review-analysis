@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.1.1] - 2023-04-15
+### Changed
+- Improved README.md with clearer instructions and formatting.
+
 ## [1.1.0] - 2023-04-12
 ### Added
 - Link to moderated reviews in Sentimo Admin from Magento Admin.
