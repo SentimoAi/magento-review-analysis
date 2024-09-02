@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Model\Command;
 
+use Sentimo\Client\HttpClient\ClientFactory;
 use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 use Sentimo\ReviewAnalysis\Model\Adapter\ReviewAdapter;
 use Sentimo\ReviewAnalysis\Model\Client;

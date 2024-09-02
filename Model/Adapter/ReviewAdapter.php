@@ -9,22 +9,22 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory as VoteCollectionFactory;
 use Magento\Review\Model\Review;
-use Sentimo\ReviewAnalysis\Api\Data\AuthorInterfaceFactory;
-use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface;
-use Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterfaceFactory;
+use Sentimo\Client\Api\Data\ReviewInterface;
+use Sentimo\Client\Api\Data\AuthorFactory;
+use Sentimo\Client\Api\Data\ReviewFactory;
 
 class ReviewAdapter
 {
     /**
-     * @param \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterfaceFactory $sentimoReviewFactory
-     * @param \Sentimo\ReviewAnalysis\Api\Data\AuthorInterfaceFactory $authorFactory
+     * @param ReviewFactory $sentimoReviewFactory
+     * @param AuthorFactory $authorFactory
      * @param \Sentimo\ReviewAnalysis\Model\Adapter\ProductAdapter $productAdapter
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $voteCollectionFactory
      */
     public function __construct(
-        private readonly SentimoReviewInterfaceFactory $sentimoReviewFactory,
-        private readonly AuthorInterfaceFactory $authorFactory,
+        private readonly ReviewFactory $sentimoReviewFactory,
+        private readonly AuthorFactory $authorFactory,
         private readonly ProductAdapter $productAdapter,
         private readonly ProductRepositoryInterface $productRepository,
         private readonly VoteCollectionFactory $voteCollectionFactory,
@@ -37,24 +37,26 @@ class ReviewAdapter
      * @return \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function adaptTo(Review $review): SentimoReviewInterface
+    public function adaptTo(Review $review): ReviewInterface
     {
-        /** @var \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface $adapteeReview */
-        $adapteeReview = $this->sentimoReviewFactory->create();
 
-        $adapteeReview->setContent($review->getDetail())
-            ->setRating($this->getRatingValue($review))
-            ->setAuthor($this->authorFactory->create([
-                'nickname' => $review->getNickname(),
-                'external_id' => $review->getCustomerId(),
-            ]))
-            ->setExternalId($review->getReviewId());
+        $reviewData = [
+            'content' => $review->getDetail(),
+            'author' => $this->authorFactory->create([
+                'nickName' => $review->getNickname(),
+                'externalId' => $review->getCustomerId(),
+            ]),
+            'externalId' => $review->getReviewId(),
+        ];
 
         $product = $this->getProductByReview($review);
 
         if ($product !== null) {
-            $adapteeReview->setProduct($this->productAdapter->adaptTo($product));
+            $reviewData['product'] = $this->productAdapter->adaptTo($product);
         }
+
+        /** @var ReviewInterface $adapteeReview */
+        $adapteeReview = $this->sentimoReviewFactory->create($reviewData);
 
         return $adapteeReview;
     }

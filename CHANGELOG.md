@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.0.0] - 2023-04-30
+### Added
+- Implementation of sentimo/php-client library for API requests.
+
+### Removed
+- Custom API request implementation.
+
 ## [1.1.1] - 2023-04-15
 ### Changed
 - Improved README.md with clearer instructions and formatting.

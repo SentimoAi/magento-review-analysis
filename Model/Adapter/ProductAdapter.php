@@ -7,18 +7,18 @@ namespace Sentimo\ReviewAnalysis\Model\Adapter;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Framework\Filter\FilterManager;
-use Sentimo\ReviewAnalysis\Api\Data\ProductInterface as SentimoProductInterface;
+use Sentimo\Client\Api\Data\ProductFactory;
 use Sentimo\ReviewAnalysis\Api\Data\ProductInterfaceFactory as SentimoProductInterfaceFactory;
 
 class ProductAdapter
 {
     /**
-     * @param \Sentimo\ReviewAnalysis\Api\Data\ProductInterfaceFactory $sentimoProductFactory
+     * @param ProductFactory $sentimoProductFactory
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSet
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      */
     public function __construct(
-        private readonly SentimoProductInterfaceFactory $sentimoProductFactory,
+        private readonly ProductFactory $sentimoProductFactory,
         private readonly AttributeSetRepositoryInterface $attributeSet,
         private readonly FilterManager $filterManager,
     ) {
@@ -30,7 +30,7 @@ class ProductAdapter
      * @return \Sentimo\ReviewAnalysis\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function adaptTo(Product $product): SentimoProductInterface
+    public function adaptTo(Product $product): \Sentimo\Client\Api\Data\Product
     {
         $attributeSetRepository = $this->attributeSet->get($product->getAttributeSetId());
 

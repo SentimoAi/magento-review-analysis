@@ -21,7 +21,7 @@ class ReviewStatusHandler
     }
 
     /**
-     * @param array<string,string[]> $sentimoReviews
+     * @param \Sentimo\Client\Api\Data\Review[] $sentimoReviews
      *
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
@@ -30,9 +30,9 @@ class ReviewStatusHandler
     {
         foreach ($sentimoReviews as $sentimoReview) {
             $review = $this->reviewFactory->create();
-            $this->reviewResource->load($review, $sentimoReview['externalId']); //phpcs:ignore
+            $this->reviewResource->load($review, $sentimoReview->getExternalId()); //phpcs:ignore
 
-            $review->setStatusId($this->mapStatusToMagento($sentimoReview['moderationStatus']));
+            $review->setStatusId($this->mapStatusToMagento($sentimoReview->getModerationStatus()));
 
             $this->reviewResource->save($review); //phpcs:ignore
             $review->aggregate();

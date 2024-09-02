@@ -65,7 +65,7 @@ class SyncReviewsCommand
     }
 
     /**
-     * @param array<string,string|int|string[]> $sentimoReviews
+     * @param \Sentimo\Client\Api\Data\Review[] $sentimoReviews
      *
      * @return int[]
      */
@@ -74,8 +74,8 @@ class SyncReviewsCommand
         $reviewIds = [];
 
         foreach ($sentimoReviews as $sentimoReview) {
-            if (isset($sentimoReview['externalId'])) {
-                $reviewIds[] = $sentimoReview['externalId'];
+            if ($sentimoReview->getExternalId() !== null) {
+                $reviewIds[] = (int) $sentimoReview->getExternalId();
             }
         }
 

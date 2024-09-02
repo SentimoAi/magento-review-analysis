@@ -2,9 +2,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <preference for="Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface" type="Sentimo\ReviewAnalysis\Model\SentimoReview" />
-    <preference for="Sentimo\ReviewAnalysis\Api\Data\AuthorInterface" type="Sentimo\ReviewAnalysis\Model\Author" />
-    <preference for="Sentimo\ReviewAnalysis\Api\Data\ProductInterface" type="Sentimo\ReviewAnalysis\Model\Product" />
     <preference for="Sentimo\ReviewAnalysis\Api\ReviewProviderInterface" type="Sentimo\ReviewAnalysis\Model\ReviewProvider" />
     <preference for="Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilderInterface" type="Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilder" />
 
@@ -45,16 +42,6 @@
     <type name="Sentimo\ReviewAnalysis\Console\Command\SyncReviewsCommand">
         <arguments>
             <argument name="syncReviewsCommand" xsi:type="object">Sentimo\ReviewAnalysis\Model\Command\SyncReviewsCommand\Proxy</argument>
-        </arguments>
-    </type>
-
-    <type name="Sentimo\ReviewAnalysis\Model\RequestParam\CompositeReviewPostRequestParamBuilder">
-        <arguments>
-            <argument name="requestParamBuilders" xsi:type="array">
-                <item name="review" xsi:type="object">Sentimo\ReviewAnalysis\Model\RequestParam\ReviewPostRequestParamBuilder</item>
-                <item name="author" xsi:type="object">Sentimo\ReviewAnalysis\Model\RequestParam\AuthorPostRequestParamBuilder</item>
-                <item name="product" xsi:type="object">Sentimo\ReviewAnalysis\Model\RequestParam\ProductPostRequestParamBuilder</item>
-            </argument>
         </arguments>
     </type>
 

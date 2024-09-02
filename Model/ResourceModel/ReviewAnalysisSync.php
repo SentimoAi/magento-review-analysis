@@ -21,7 +21,7 @@ class ReviewAnalysisSync extends AbstractDb
         $data = [];
 
         foreach ($reviewIds as $reviewId) {
-            if ($reviewId === null) {
+            if ((int) $reviewId === 0) {
                 continue;
             }
 
