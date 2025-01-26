@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sentimo\ReviewAnalysis\Model\Command;
 
 use Magento\Framework\App\ResourceConnection;
+use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 use Sentimo\ReviewAnalysis\Model\Client;
 use Sentimo\ReviewAnalysis\Model\Config;
 use Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilderInterface;
@@ -14,14 +15,8 @@ use Sentimo\ReviewAnalysis\Model\ReviewStatusHandler;
 
 class SyncReviewsCommand
 {
-    /**
-     * @param \Sentimo\ReviewAnalysis\Model\Client $client
-     * @param \Sentimo\ReviewAnalysis\Model\RequestParam\ReviewGetRequestParamBuilderInterface $reviewGetRequestParamBuilder
-     * @param \Sentimo\ReviewAnalysis\Model\Config $config
-     * @param \Sentimo\ReviewAnalysis\Model\ReviewStatusHandler $reviewStatusHandler
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param \Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync $reviewAnalysisSyncResource
-     */
+    private const BATCH_SIZE = 100;
+
     public function __construct(
         private readonly Client $client,
         private readonly ReviewGetRequestParamBuilderInterface $reviewGetRequestParamBuilder,
@@ -29,6 +24,7 @@ class SyncReviewsCommand
         private readonly ReviewStatusHandler $reviewStatusHandler,
         private readonly ResourceConnection $resourceConnection,
         private readonly ReviewAnalysisSync $reviewAnalysisSyncResource,
+        private readonly ReviewProviderInterface $reviewProvider
     ) {
     }
 
@@ -44,7 +40,21 @@ class SyncReviewsCommand
             return;
         }
 
-        $sentimoReviews = $this->client->getReviews($this->reviewGetRequestParamBuilder->buildRequestParam(), true);
+        $reviewIds = $this->reviewProvider->getSyncInProgressReviewIds();
+        $batches = $this->splitIntoBatches($reviewIds, self::BATCH_SIZE);
+
+        $sentimoReviews = [];
+
+        foreach ($batches as $batch) {
+            $batchReviews = $this->client->getReviews(
+                $this->reviewGetRequestParamBuilder->buildRequestParam($batch),
+                true
+            );
+
+            foreach ($batchReviews as $review) {
+                $sentimoReviews[] = $review; // Append reviews directly
+            }
+        }
 
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
@@ -62,6 +72,19 @@ class SyncReviewsCommand
         }
 
         $connection->commit();
+    }
+
+    /**
+     * Divides an array into batches.
+     *
+     * @param array $items
+     * @param int $batchSize
+     *
+     * @return array
+     */
+    private function splitIntoBatches(array $items, int $batchSize): array
+    {
+        return array_chunk($items, $batchSize);
     }
 
     /**

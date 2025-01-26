@@ -9,20 +9,12 @@ use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 class ReviewGetRequestParamBuilder implements ReviewGetRequestParamBuilderInterface
 {
     /**
-     * @param \Sentimo\ReviewAnalysis\Api\ReviewProviderInterface $reviewProvider
-     */
-    public function __construct(
-        private readonly ReviewProviderInterface $reviewProvider
-    ) {
-    }
-
-    /**
      * @inheritDoc
      */
-    public function buildRequestParam(): array
+    public function buildRequestParam(array $reviewIds): array
     {
         return [
-            'externalId' => $this->reviewProvider->getSyncInProgressReviewIds(),
+            'externalId' => $reviewIds,
             'exists' => ['moderationStatus' => true],
         ];
     }
