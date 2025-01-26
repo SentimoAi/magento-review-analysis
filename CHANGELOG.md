@@ -6,17 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-## [2.2.0] - 2025-01-26
-### Added
-- Get reviews in batches to avoid too long requests.
-
 ## [2.1.0] - 2025-01-26
 ### Added
 - Add rating to the Product data model.
 
 ### Fixed
 - Fix price type in the Product data model.
-- 
+- Get reviews in batches to avoid too long requests.
 ## [2.0.0] - 2023-04-30
 ### Added
 - Implementation of sentimo/php-client library for API requests.
