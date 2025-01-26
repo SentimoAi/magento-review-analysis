@@ -8,7 +8,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Framework\Filter\FilterManager;
 use Sentimo\Client\Api\Data\ProductFactory;
-use Sentimo\ReviewAnalysis\Api\Data\ProductInterfaceFactory as SentimoProductInterfaceFactory;
 
 class ProductAdapter
 {
@@ -27,7 +26,7 @@ class ProductAdapter
     /**
      * @param \Magento\Catalog\Model\Product $product
      *
-     * @return \Sentimo\ReviewAnalysis\Api\Data\ProductInterface
+     * @return \Sentimo\Client\Api\Data\Product
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function adaptTo(Product $product): \Sentimo\Client\Api\Data\Product
@@ -36,7 +35,7 @@ class ProductAdapter
 
         return $this->sentimoProductFactory->create([
             'name' => $product->getName(),
-            'price' => (string) $product->getPrice(),
+            'price' => $product->getPrice(),
             'description' => $this->filterManager->stripTags($product->getData('description')),
             'product_type' => $attributeSetRepository->getAttributeSetName(),
             'identifier' => $product->getSku(),

@@ -34,7 +34,7 @@ class ReviewAdapter
     /**
      * @param \Magento\Review\Model\Review $review
      *
-     * @return \Sentimo\ReviewAnalysis\Api\Data\SentimoReviewInterface
+     * @return \Sentimo\Client\Api\Data\ReviewInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function adaptTo(Review $review): ReviewInterface
@@ -46,6 +46,7 @@ class ReviewAdapter
                 'nickName' => $review->getNickname(),
                 'externalId' => $review->getCustomerId(),
             ]),
+            'rating' => $this->getRatingValue($review),
             'externalId' => $review->getReviewId(),
         ];
 
