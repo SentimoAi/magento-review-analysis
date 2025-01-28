@@ -5,7 +5,7 @@ The Sentimo Review Analysis module integrates your Magento 2 store with [Sentimo
 To install the Sentimo Review Analysis module in your Magento 2 store, execute the following commands from the root directory of your Magento installation:
 
 ```bash
-    composer require sentimo/review-analysis
+    composer require sentimo/magento-review-analysis
     bin/magento setup:upgrade
     bin/magento cache:clean
 ```
