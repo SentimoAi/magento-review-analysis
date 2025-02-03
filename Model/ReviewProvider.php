@@ -12,6 +12,8 @@ use Sentimo\ReviewAnalysis\Model\ReviewAnalysisSync as ReviewAnalysisSyncModel;
 
 class ReviewProvider implements ReviewProviderInterface
 {
+    private ?array $completeReviewIds = null;
+
     /**
      * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory
      * @param \Sentimo\ReviewAnalysis\Model\ResourceModel\ReviewAnalysisSync\CollectionFactory $reviewAnalysisCollectionFactory
@@ -69,8 +71,12 @@ class ReviewProvider implements ReviewProviderInterface
      */
     public function getReviewAnalysisSyncCompleteReviewIds(): array
     {
-        return $this->reviewAnalysisCollectionFactory->create()
-            ->addFieldToFilter('status', ReviewAnalysisSyncModel::STATUS_COMPLETE)
-            ->getAllIds();
+        if ($this->completeReviewIds === null) {
+            $this->completeReviewIds = $this->reviewAnalysisCollectionFactory->create()
+                ->addFieldToFilter('status', ReviewAnalysisSyncModel::STATUS_COMPLETE)
+                ->getAllIds();
+        }
+
+        return $this->completeReviewIds;
     }
 }

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [3.1.0] - 2025-01-28
+### Changed
+- Improve review provider review fetching performance.
 ## [3.0.0] - 2025-01-27
 ### Changed
 - Change package name to `sentimo/magento-review-analysis`.
