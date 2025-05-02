@@ -56,6 +56,10 @@ class SyncReviewsCommand
             }
         }
 
+        if (empty($sentimoReviews)) {
+            return;
+        }
+
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
 
