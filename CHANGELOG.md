@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [3.2.0] - 2025-05-02
+### Removed
+- Remove API Base URI configuration setting. The API Base URI is now hardcoded to `https://sentimoai.com/`.
+### Fixed
+- Fix issue with review status not updating correctly after sentiment analysis.
 ## [3.1.0] - 2025-01-28
 ### Changed
 - Improve review provider review fetching performance.
