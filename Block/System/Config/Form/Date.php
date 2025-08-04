@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sentimo\ReviewAnalysis\Block\Systrem\Config\Form;
+namespace Sentimo\ReviewAnalysis\Block\System\Config\Form;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;

@@ -20,7 +20,7 @@ class ReviewProvider implements ReviewProviderInterface
      * @param \Sentimo\ReviewAnalysis\Model\Config $config
      */
     public function __construct(
-        private readonly Collectionfactory $reviewCollectionFactory,
+        private readonly CollectionFactory $reviewCollectionFactory,
         private readonly ReviewAnalysisSyncCollectionFactory $reviewAnalysisCollectionFactory,
         private readonly Config $config
     ) {

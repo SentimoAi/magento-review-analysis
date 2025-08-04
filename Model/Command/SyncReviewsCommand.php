@@ -41,6 +41,11 @@ class SyncReviewsCommand
         }
 
         $reviewIds = $this->reviewProvider->getSyncInProgressReviewIds();
+
+        if ($reviewIds === []) {
+            return;
+        }
+
         $batches = $this->splitIntoBatches($reviewIds, self::BATCH_SIZE);
 
         $sentimoReviews = [];
@@ -51,9 +56,7 @@ class SyncReviewsCommand
                 true
             );
 
-            foreach ($batchReviews as $review) {
-                $sentimoReviews[] = $review; // Append reviews directly
-            }
+            $sentimoReviews = array_merge($sentimoReviews, $batchReviews);
         }
 
         if (empty($sentimoReviews)) {
@@ -98,14 +101,17 @@ class SyncReviewsCommand
      */
     private function getReviewIds(array $sentimoReviews): array
     {
-        $reviewIds = [];
-
-        foreach ($sentimoReviews as $sentimoReview) {
-            if ($sentimoReview->getExternalId() !== null) {
-                $reviewIds[] = (int) $sentimoReview->getExternalId();
-            }
-        }
-
-        return $reviewIds;
+        return array_values(
+            array_filter(
+                array_map(
+                    static function ($sentimoReview) {
+                        return $sentimoReview->getExternalId() !== null
+                            ? (int) $sentimoReview->getExternalId()
+                            : null;
+                    },
+                    $sentimoReviews
+                )
+            )
+        );
     }
 }

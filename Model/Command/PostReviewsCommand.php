@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sentimo\ReviewAnalysis\Model\Command;
 
-use Sentimo\Client\HttpClient\ClientFactory;
 use Sentimo\ReviewAnalysis\Api\ReviewProviderInterface;
 use Sentimo\ReviewAnalysis\Model\Adapter\ReviewAdapter;
 use Sentimo\ReviewAnalysis\Model\Client;
@@ -33,13 +32,21 @@ class PostReviewsCommand
             return;
         }
 
-        $reviewsToPost = [];
+        $reviews = $this->reviewProvider->getNotSyncedReviews();
 
-        foreach ($this->reviewProvider->getNotSyncedReviews() as $review) {
-            $reviewsToPost[] = $this->adapter->adaptTo($review);
+        if ($reviews === []) {
+            return;
         }
 
+        $reviewsToPost = array_map([$this->adapter, 'adaptTo'], $reviews);
+
         $reviewIds = $this->client->postReviews($reviewsToPost);
-        $this->reviewAnalysisSyncResource->updateReviewsStatus($reviewIds, ReviewAnalysisSync::STATUS_IN_PROGRESS);
+
+        if ($reviewIds !== []) {
+            $this->reviewAnalysisSyncResource->updateReviewsStatus(
+                $reviewIds,
+                ReviewAnalysisSync::STATUS_IN_PROGRESS
+            );
+        }
     }
 }
