@@ -1,0 +1,30 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Sentimo\ReviewAnalysis\ViewModel\ProductContext $productContextViewModel */
+$productContextViewModel = $block->getProductContextViewModel();
+$product = $productContextViewModel?->getProduct();
+
+/** @var \Sentimo\ReviewAnalysis\ViewModel\HelperWidget $helperWidgetViewModel */
+$helperWidgetViewModel = $block->getHelperWidgetViewModel();
+?>
+
+<script>
+    require(['jquery', 'sentimoWidget'], function ($, Sentimo) {
+        'use strict';
+
+        $(document).ready(function () {
+            Sentimo.reviewHelper({
+                apiKey: '<?= $helperWidgetViewModel->getApiKey() ?>',
+                reviewFieldSelector: '#review_field',
+                productName: '<?= $product?->getName() ?>',
+                productPrice: '<?= $product?->getFinalPrice() ?>',
+                productCurrency: '<?= $productContextViewModel?->getCurrencyCode() ?>',
+                productDescription: '<?= $productContextViewModel->getProductDescription($product)?>) ?>',
+                productType: '<?= $productContextViewModel?->getAttributeSetName($product)?>',
+            });
+        });
+    });
+</script>

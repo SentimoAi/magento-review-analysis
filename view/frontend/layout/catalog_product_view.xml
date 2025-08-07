@@ -1,0 +1,15 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="sentimo.review.analysis.helper_widget"
+                   template="Sentimo_ReviewAnalysis::helper_widget.phtml" before="product.info.details"
+                    ifconfig="sentimo_review_analysis/review_helper/enabled">
+                <arguments>
+                    <argument name="product_context_view_model" xsi:type="object">Sentimo\ReviewAnalysis\ViewModel\ProductContext</argument>
+                    <argument name="helper_widget_view_model" xsi:type="object">Sentimo\ReviewAnalysis\ViewModel\HelperWidget</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

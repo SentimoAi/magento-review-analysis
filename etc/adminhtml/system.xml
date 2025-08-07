@@ -48,6 +48,17 @@
                     <comment>Date until which reviews will be considered for sync.</comment>
                 </field>
             </group>
+            <group id="review_helper" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1">
+                <label>Review Helper Widget</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="0">
+                    <label>API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>
