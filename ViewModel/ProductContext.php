@@ -7,7 +7,6 @@ namespace Sentimo\ReviewAnalysis\ViewModel;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 
@@ -17,7 +16,6 @@ class ProductContext implements ArgumentInterface
         private readonly View $productViewBlock,
         private readonly AttributeSetRepositoryInterface $attributeSetRepository,
         private readonly PriceCurrencyInterface $priceCurrency,
-        private SerializerInterface $serializer
     ) {
     }
 
@@ -48,7 +46,7 @@ class ProductContext implements ArgumentInterface
     public function getProductDescription(?Product $product): ?string
     {
         if ($product && $product->getDescription()) {
-            return $this->serializer->serialize($product->getDescription());
+            return (string)$product->getDescription();
         }
 
         return null;
