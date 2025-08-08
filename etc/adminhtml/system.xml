@@ -58,6 +58,38 @@
                     <label>API Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
+                <field id="review_field_selector" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Review Field Selector</label>
+                    <comment>CSS selector for the review textarea.</comment>
+                </field>
+                <field id="tooltip_text" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Tooltip Text</label>
+                    <comment>Text displayed when hovering the widget icon.</comment>
+                </field>
+                <field id="use_suggestion_button_label" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Use Suggestion Button Label</label>
+                </field>
+                <field id="continue_button_label" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Continue Button Label</label>
+                </field>
+                <field id="cancel_button_label" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Cancel Button Label</label>
+                </field>
+                <field id="see_suggestion_link_label" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>See Suggestion Link Label</label>
+                </field>
+                <field id="message_too_short" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Message: Too Short</label>
+                </field>
+                <field id="message_loading" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Message: Loading</label>
+                </field>
+                <field id="message_success" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Message: Success</label>
+                </field>
+                <field id="message_error" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Message: Error</label>
+                </field>
             </group>
         </section>
     </system>

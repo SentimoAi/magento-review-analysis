@@ -6,9 +6,18 @@
 /** @var \Sentimo\ReviewAnalysis\ViewModel\ProductContext $productContextViewModel */
 $productContextViewModel = $block->getProductContextViewModel();
 $product = $productContextViewModel?->getProduct();
+$productDescription = $productContextViewModel->getProductDescription($product);
 
 /** @var \Sentimo\ReviewAnalysis\ViewModel\HelperWidget $helperWidgetViewModel */
 $helperWidgetViewModel = $block->getHelperWidgetViewModel();
+
+$configJson = $helperWidgetViewModel->getConfigJson([
+    'productName' => $product?->getName(),
+    'productPrice' => $product?->getFinalPrice(),
+    'productPriceCurrency' => $productContextViewModel?->getCurrencyCode(),
+    'productDescription' => $productDescription ? $block->stripTags($productDescription) : null,
+    'productType' => $productContextViewModel?->getAttributeSetName($product),
+]);
 ?>
 
 <script>
@@ -16,15 +25,7 @@ $helperWidgetViewModel = $block->getHelperWidgetViewModel();
         'use strict';
 
         $(document).ready(function () {
-            Sentimo.reviewHelper({
-                apiKey: '<?= $helperWidgetViewModel->getApiKey() ?>',
-                reviewFieldSelector: '#review_field',
-                productName: '<?= $product?->getName() ?>',
-                productPrice: '<?= $product?->getFinalPrice() ?>',
-                productCurrency: '<?= $productContextViewModel?->getCurrencyCode() ?>',
-                productDescription: '<?= $productContextViewModel->getProductDescription($product)?>) ?>',
-                productType: '<?= $productContextViewModel?->getAttributeSetName($product)?>',
-            });
+            Sentimo.reviewHelper(<?= /* @noEscape */ $configJson ?>);
         });
     });
 </script>
